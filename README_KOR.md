@@ -7,7 +7,8 @@
 [![Documentation](https://img.shields.io/website/http/tnagler.github.io/quickpool.svg)](https://tnagler.github.io/quickpool/)
 [![DOI](https://zenodo.org/badge/427536398.svg)](https://zenodo.org/badge/latestdoi/427536398)
 
-> C++11에서의 빠르고 쉬운 병렬 컴퓨팅
+> Fast and easy parallel computing in C++11
+
 ## Why quickpool?
 
 ### Developer friendly

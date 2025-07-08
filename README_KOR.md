@@ -7,23 +7,22 @@
 [![Documentation](https://img.shields.io/website/http/tnagler.github.io/quickpool.svg)](https://tnagler.github.io/quickpool/)
 [![DOI](https://zenodo.org/badge/427536398.svg)](https://zenodo.org/badge/latestdoi/427536398)
 
-> Fast and easy parallel computing in C++11
 > C++11에서의 빠르고 쉬운 병렬 컴퓨팅
 ## Why quickpool?
 
 ### Developer friendly
 
-The library consists of a [single header file](https://github.com/tnagler/quickpool/blob/parallel-for/quickpool.hpp) with permissive license. 
-It requires only C++11 and is otherwise self-contained.
-Just drop `quickpool.hpp` in your project folder and enjoy.
+자유로운 [single header file](https://github.com/tnagler/quickpool/blob/parallel-for/quickpool.hpp)만으로 구성되어있으며,
+C++11만 있으면 됩니다.
+`quickpool.hpp`를 프로젝트 안에 넣기만 하면 됩니다.
 
 ### User friendly API
 
-* [`push(f, args...)`](https://tnagler.github.io/quickpool/namespacequickpool.html#affc41895dab281715c271aca3649e830) schedules a task running `f(args...)` with no return,   
-* [`async(f, args...)`](https://tnagler.github.io/quickpool/namespacequickpool.html#a10575809d24ead3716e312585f90a94a) schedules a task running `f(args...)` and returns an [`std::future`](https://en.cppreference.com/w/cpp/thread/future), 
-* [`wait()`](https://tnagler.github.io/quickpool/namespacequickpool.html#a086671a25cc4f207112bc82a00688301) waits for all scheduled tasks to finish,
-* [`parallel_for(b, e, f)`](https://tnagler.github.io/quickpool/namespacequickpool.html#aa72b140a64eabe34cd9302bab837c24c) runs `f(i)` for all `b <= i < e`,
-* [`parallel_for_each(x, f)`](https://tnagler.github.io/quickpool/namespacequickpool.html#aeb91fe18664b8d06523aba081174abe3) runs `f(*it)` for all  `std::begin(x) <= it < std::end(x)`.
+* [`push(f, args...)`](https://tnagler.github.io/quickpool/namespacequickpool.html#affc41895dab281715c271aca3649e830) 반환값 없이 `f(args...)`를 실행하는 작업을 예약
+* [`async(f, args...)`](https://tnagler.github.io/quickpool/namespacequickpool.html#a10575809d24ead3716e312585f90a94a) `f(args...)`를 실행하는 작업을 예약하고, [`std::future`](https://en.cppreference.com/w/cpp/thread/future)를 반환
+* [`wait()`](https://tnagler.github.io/quickpool/namespacequickpool.html#a086671a25cc4f207112bc82a00688301) 예약된 모든 작업이 끝날 때까지 대기
+* [`parallel_for(b, e, f)`](https://tnagler.github.io/quickpool/namespacequickpool.html#aa72b140a64eabe34cd9302bab837c24c) `b`이상 `e`미만의 모든 i에 대해 `f(i)`를 실행
+* [`parallel_for_each(x, f)`](https://tnagler.github.io/quickpool/namespacequickpool.html#aeb91fe18664b8d06523aba081174abe3) `x`의 모든 원소(반복자)에 대해 `f(*it)`를 병렬로 실행
 
 Loops can be nested, see the examples below. All functions 
 dispatch to a global thread pool instantiated only once with as 

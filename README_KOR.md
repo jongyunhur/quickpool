@@ -24,18 +24,21 @@ C++11만 있으면 됩니다.
 * [`parallel_for(b, e, f)`](https://tnagler.github.io/quickpool/namespacequickpool.html#aa72b140a64eabe34cd9302bab837c24c) `b`이상 `e`미만의 모든 i에 대해 `f(i)`를 실행
 * [`parallel_for_each(x, f)`](https://tnagler.github.io/quickpool/namespacequickpool.html#aeb91fe18664b8d06523aba081174abe3) `x`의 모든 원소(반복자)에 대해 `f(*it)`를 병렬로 실행
 
-Loops can be nested, see the examples below. All functions 
-dispatch to a global thread pool instantiated only once with as 
-many threads as there are cores. Optionally, one can create a local `ThreadPool`
-exposing the functions above. See also the [API documentation](https://tnagler.github.io/quickpool/).
+반복문은 중첩하여 사용할 수 있으며, 아래의 예시를 참고하면 됩니다.
+모든 함수는 한 번만 생성되는 global thread pool로 분배되며, 이 pool은 시스템의 코어 수만큼 thread를 가집니다.
+선택적으로, 앞서 나온 함수들로 로컬 `ThreadPool`을 직접 제작할 수 있습니다. 
+자세한 내용은 [API 문서](https://tnagler.github.io/quickpool/)을 참고하세요.
 
-### Cutting edge algorithms
+### Cutting edge algorithms(최신 알고리즘)
 
-All scheduling uses [work stealing](https://en.wikipedia.org/wiki/Work_stealing) synchronized by [cache-aligned atomic](https://github.com/tnagler/aligned_atomic) operations.
+모든 스케줄링은 [work stealing](https://en.wikipedia.org/wiki/Work_stealing) 기법을 사용하며, [캐시 정렬 원자 연산(cache-aligned atomic)](https://github.com/tnagler/aligned_atomic)으로 동기화됩니다.
+* [`work stealing`]: 각 프로세서가 자신의 작업 큐를 우선 처리하다가, 작업이 없으면 다른 큐에서 작업을 가져오는 방식의 스케줄링 기법
+* [`cache-aligned atomic`]: 멀티스레드 환경에서 여러 스레드가 각각 다른 변수를 접근할 때 발생할 수 있는 `false sharing` 문제를 방지하기 위해, 원자 변수를 캐시 라인 크기에 정렬하고 패딩하는 최적화 기법dlqslek.
+* [`false sharing`]: 서로 다른 스레드가 같은 캐시 라인에 위치한 변수에 접근해 불필요한 캐시 무효화와 성능 저하를 유발하는 현상
 
-The thread pool assigns each worker thread a task queue. The workers process 
-first their own queue and then steal work from others. The algorithm is [lock-free](https://en.wikipedia.org/wiki/Non-blocking_algorithm)
-in the standard case where only a single thread pushes work to the pool. 
+스레드 풀은 각 작업자에게 작업 큐를 할당합니다. 작업자들은 먼저 자신의 큐에 있는 작업을 처리한 뒤, 다른 작업자의 큐에서 작업을 훔쳐옵니다.
+이러한 알고리즘은 표준적인 상황(오직 하나의 스레드만이 작업을 풀에 추가하는 경우)일 때 [lock-free](https://en.wikipedia.org/wiki/Non-blocking_algorithm) 방식으로 동작합니다.
+* [`lock-free`]: 여러 스레드가 동시에 접근해도 락(잠금) 없이 안전하게 동작하는 알고리즘
 
 Parallel loops assign each worker part of the loop range.
 When a worker completes its own range, it steals half the range
